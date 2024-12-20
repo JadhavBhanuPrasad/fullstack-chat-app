@@ -63,7 +63,7 @@ const Auth = () => {
 
                 <Button className="rounded-full p-2 text-white" onClick={handleLogin}>Login</Button>
               </TabsContent>
-              <TabsContent value="signup" className=" flex flex-col gap-3">
+              <TabsContent value="signup" className=" flex flex-col gap-3 ">
                 <Input
                   placeholder="Email"
                   type="email"
