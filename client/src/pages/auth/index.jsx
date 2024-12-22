@@ -4,13 +4,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-
+import { toast } from "sonner"
+import { apiClient } from "../../../lib/api-client";
+import { SIGNUP_ROUTE } from "../../../utils/constants.js";
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const handleSignUp = () => {
 
+  const validateSignup = () => { 
+    if (email.length === 0) {
+      toast("Email is required")
+      return false
+    }
+    if(password.length === 0) {
+      toast("Password is required")
+      return false
+    }
+    if (password !== confirmPassword) {
+      toast("Password and Confirm Password must be same")
+      return false
+    }
+    return true
+  }
+
+  const handleSignUp = async () => {
+    if(validateSignup()) {
+      try {
+        const response = await apiClient.post(SIGNUP_ROUTE, 
+          { email, password },
+          { withCredentials: true }
+        );
+        console.log(response);
+        toast("Signup successful!");
+      } catch (error) {
+        console.error("Error during signup:", error)
+        toast("Signup failed. Please try again.")
+      }
+    }
   }
   const handleLogin = () => {
 
@@ -58,7 +89,7 @@ const Auth = () => {
                   value={password}
                   type="password"
                   className="rounded-full p-2 border-2"
-                  onChange={(e) => setPassword(e.target.password)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
 
                 <Button className="rounded-full p-2 text-white" onClick={handleLogin}>Login</Button>
@@ -77,14 +108,14 @@ const Auth = () => {
                   value={password}
                   type="password"
                   className="rounded-full p-2 border-2"
-                  onChange={(e) => setPassword(e.target.password)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <Input
                   placeholder="Confirm Password"
                   value={confirmPassword}
                   type="password"
                   className="rounded-full p-2 border-2"
-                  onChange={(e) => setConfirmPassword(e.target.password)}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <Button className="rounded-full p-2 text-white" onClick={handleSignUp}>Sign Up</Button>
               </TabsContent>
