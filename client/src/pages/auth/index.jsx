@@ -4,15 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner"
 import { apiClient } from "../../../lib/api-client";
 import { SIGNUP_ROUTE } from "../../../utils/constants.js";
+import { LOGIN_ROUTE } from "../../../utils/constants.js";
+import { useAppStore } from "../../store/index.js";
 const Auth = () => {
+
+  let navigate = useNavigate();
+  const {setUserInfo} = useAppStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const validateSignup = () => { 
+
     if (email.length === 0) {
       toast("Email is required")
       return false
@@ -27,7 +34,6 @@ const Auth = () => {
     }
     return true
   }
-
   const handleSignUp = async () => {
     if(validateSignup()) {
       try {
@@ -35,16 +41,46 @@ const Auth = () => {
           { email, password },
           { withCredentials: true }
         );
-        console.log(response);
+        setUserInfo(response.data.user);
         toast("Signup successful!");
+        navigate("/profile");
       } catch (error) {
         console.error("Error during signup:", error)
         toast("Signup failed. Please try again.")
       }
     }
   }
-  const handleLogin = () => {
 
+  const validateLogin = () => {
+    if (email.length === 0) {
+      toast("Email is required")
+      return false
+    }
+    if(password.length === 0) {
+      toast("Password is required")
+      return false
+    }
+    return true
+  }
+  const handleLogin = async () => {
+    if(validateLogin()) {
+      try {
+        const response = await apiClient.post(LOGIN_ROUTE, 
+          { email, password },
+          { withCredentials: true }
+        );
+        setUserInfo(response.data.user);
+        toast("Login successful!");
+        if(response.data.user.profileSetup) {
+          navigate("/chat");
+        } else {
+          navigate("/profile");
+        }
+      } catch (error) {
+        console.error("Error during login:", error)
+        toast("Login failed. Please try again.")
+      }
+    }
   }
   return (
     <div className="flex items-center justify-center">
