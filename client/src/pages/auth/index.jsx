@@ -96,7 +96,7 @@ const Auth = () => {
             </p>
           </div>
           <div className="flex items-center justify-center w-full">
-            <Tabs className="w-3/4">
+            <Tabs defaultValue="login" className="w-3/4">
               <TabsList className="bg-transparent rounded-none grid w-full grid-cols-2">
                 <TabsTrigger
                   value="login"
