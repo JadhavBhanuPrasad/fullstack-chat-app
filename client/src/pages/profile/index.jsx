@@ -1,5 +1,4 @@
-import { useAppStore } from "../../store/index.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { FaTrash, FaPlus } from "react-icons/fa";
@@ -8,8 +7,10 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { getColor, colors } from "@/lib/utils";
 import { toast } from "sonner";
-import { UPDATE_PROFILE_ROUTE } from "../../../utils/constants.js";
+import { HOST } from "../../../utils/constants.js";
+import { ADD_IMAGE_ROUTE, UPDATE_PROFILE_ROUTE , DELETE_IMAGE_ROUTE} from "../../../utils/constants.js";
 import { apiClient } from "../../../lib/api-client.js";
+import { useAppStore } from "../../store/index.js";
 const Profile = () => {
   const navigate = useNavigate();
   const { userInfo, setUserInfo } = useAppStore();
@@ -18,12 +19,16 @@ const Profile = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [selectedColor, setSelectedColor] = useState(0);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if(userInfo.profileSetup) {
       setFirstName(userInfo.firstName);
       setLastName(userInfo.lastName);
       setSelectedColor(userInfo.color);
+    }
+    if(userInfo.image) {
+      setImage(`${HOST}/${userInfo.image}`);
     }
   }, [userInfo]);
 
@@ -45,6 +50,7 @@ const Profile = () => {
           { firstName, lastName, color: selectedColor },
           { withCredentials: true }
         );
+
         setUserInfo({...response.data});
         toast("Profile updated successfully!");
         navigate("/chat");
@@ -54,11 +60,68 @@ const Profile = () => {
       }
     }
   }
+
+  const handleNavigate = () => {
+    if(userInfo.profileSetup) {
+      navigate("/chat");
+    } else {
+      toast.error("Please complete your profile setup to continue.")
+    }
+  }
+
+  const handleDeleteImage = async (event) => {
+    event.stopPropagation();
+    try {
+      const response = await apiClient.delete(DELETE_IMAGE_ROUTE, {
+        withCredentials: true,
+      });
+      if(response.status === 200) {
+        setUserInfo({...userInfo, image: null});
+        toast("Image deleted successfully!");
+        setImage(null);
+      }
+    } catch (error) {
+      console.error("Error during image delete:", error);
+      toast("Image delete failed. Please try again.");
+    }
+  }
+
+  const handleFileInputClick = () => {
+    fileInputRef.current.click();
+  }
+
+  const handleImageChange = async (event) => {
+
+      try {
+        const file = event.target.files[0];
+        if(file) {
+          const formData = new FormData();
+          formData.append("profile-image", file);
+          const response = await apiClient.post(ADD_IMAGE_ROUTE, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+          });
+          
+          if(response.status === 200 && response.data.image) {
+            setUserInfo({...userInfo, image: response.data.image});
+            setImage(`${HOST}/${response.data.image}`);
+          } 
+        }
+      }
+      catch (error) {
+        console.error("Error during image upload:", error);
+        toast("Image upload failed. Please try again.");
+      }
+
+  }
+
   return (
     <div className=" bg-[#1b1c24] h-[full] flex items-center justify-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
-        <div>
-          <IoArrowBack className="text-4xl lg:text-6xl  text-white/90 cursor-pointer" />
+        <div onClick={handleNavigate}>
+          <IoArrowBack className="text-4xl lg:text-6xl  text-white/90 cursor-pointer"  />
         </div>
         <div className="grid grid-cols-2">
           <div
@@ -75,9 +138,7 @@ const Profile = () => {
                 />
               ) : (
                 <div
-                  className={`uppercase h-24 w-24 md:w-48 md:h-48 flex items-center justify-center text-5xl md:text-4xl font-bold text-white border-[1px] rounded-full ${getColor(
-                    selectedColor
-                  )}`}
+                  className={`uppercase h-24 w-24 md:w-48 md:h-48 flex items-center justify-center text-5xl md:text-4xl font-bold text-white border-[1px] rounded-full ${getColor(selectedColor)}`}
                 >
                   {firstName
                     ? firstName.split("").shift()
@@ -86,7 +147,9 @@ const Profile = () => {
               )}
             </Avatar>
             {hovered && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50 ring-fuchsia-50 rounded-full cursor-pointer">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 ring-fuchsia-50 rounded-full cursor-pointer"
+              onClick={image ? handleDeleteImage : handleFileInputClick} 
+              >
                 {image ? (
                   <FaTrash className="text-white text-3xl cursor-pointer" />
                 ) : (
@@ -94,6 +157,14 @@ const Profile = () => {
                 )}
               </div>
             )}
+            <input
+            type="file"
+            ref={fileInputRef} 
+            className="hidden"
+            name="profile-image"
+            onChange={handleImageChange}
+            accept=".png, .jpg, .jpeg, .svg"
+            />
           </div>
           <div className="flex flex-col items-center justify-center gap-5 min-w-32 md:min-w-64">
             <div className="w-full">

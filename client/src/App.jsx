@@ -34,7 +34,6 @@ function App() {
         } else {
           setUserInfo(undefined);
         }
-        console.log('resp',response)
       } catch (error) {
         console.error("Error getting user info:", error);
       } finally {
