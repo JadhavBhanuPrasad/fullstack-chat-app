@@ -118,18 +118,18 @@ const Profile = () => {
   }
 
   return (
-    <div className=" bg-[#1b1c24] h-[full] flex items-center justify-center flex-col gap-10">
+    <div className=" bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
         <div onClick={handleNavigate}>
           <IoArrowBack className="text-4xl lg:text-6xl  text-white/90 cursor-pointer"  />
         </div>
         <div className="grid grid-cols-2">
           <div
-            className="h-full w-24 md:w-48 md:h-48 relative flex items-center justify-center"
+            className="h-full w-36 md:w-48 md:h-48 relative flex items-center justify-center"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           >
-            <Avatar className="h-24 w-24 md:w-48 md:h-48 rounded-full overflow-hidden">
+            <Avatar className="h-36 w-36 md:w-48 md:h-48 rounded-full overflow-hidden">
               {image ? (
                 <AvatarImage
                   src={image}
@@ -138,7 +138,7 @@ const Profile = () => {
                 />
               ) : (
                 <div
-                  className={`uppercase h-24 w-24 md:w-48 md:h-48 flex items-center justify-center text-5xl md:text-4xl font-bold text-white border-[1px] rounded-full ${getColor(selectedColor)}`}
+                  className={`uppercase h-36 w-36 md:w-48 md:h-48 flex items-center justify-center text-5xl md:text-4xl font-bold text-white border-[1px] rounded-full ${getColor(selectedColor)}`}
                 >
                   {firstName
                     ? firstName.split("").shift()
@@ -147,7 +147,7 @@ const Profile = () => {
               )}
             </Avatar>
             {hovered && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50 ring-fuchsia-50 rounded-full cursor-pointer"
+              <div className="absolute  flex items-center justify-center h-36 w-36 md:w-48 md:h-48 bg-black/50 ring-fuchsia-50 rounded-full cursor-pointer"
               onClick={image ? handleDeleteImage : handleFileInputClick} 
               >
                 {image ? (

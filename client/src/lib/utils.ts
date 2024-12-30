@@ -1,6 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
+import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -17,3 +16,4 @@ export const colors = [
   }
   return colors[0]; // Fallback to the first color if out of range
   }
+

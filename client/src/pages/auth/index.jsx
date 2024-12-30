@@ -83,7 +83,7 @@ const Auth = () => {
     }
   }
   return (
-    <div className="flex items-center justify-center">
+    <div className="h-[100vh] w-[100vw] flex items-center justify-center">
       <div className="h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
         <div className="flex flex-col items-center justify-center">
           <div className="flex items-center justify-center flex-col">
@@ -97,7 +97,7 @@ const Auth = () => {
           </div>
           <div className="flex items-center justify-center w-full">
             <Tabs defaultValue="login" className="w-3/4">
-              <TabsList className="bg-transparent rounded-none grid w-full grid-cols-2">
+              <TabsList className="bg-transparent rounded-none grid w-full grid-cols-2 mb-6">
                 <TabsTrigger
                   value="login"
                   className="bg-white border-b-2 hover:border-transparent focus:outline-none data-[state=active]:border-b-purple-500 rounded-none "
@@ -128,7 +128,7 @@ const Auth = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
 
-                <Button className="rounded-full p-2 text-white" onClick={handleLogin}>Login</Button>
+                <Button className="rounded-full p-2 text-white bg-black" onClick={handleLogin}>Login</Button>
               </TabsContent>
               <TabsContent value="signup" className=" flex flex-col gap-3 ">
                 <Input
@@ -153,7 +153,7 @@ const Auth = () => {
                   className="rounded-full p-2 border-2"
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <Button className="rounded-full p-2 text-white" onClick={handleSignUp}>Sign Up</Button>
+                <Button className="rounded-full p-2 text-white bg-black" onClick={handleSignUp}>Sign Up</Button>
               </TabsContent>
             </Tabs>
           </div>
