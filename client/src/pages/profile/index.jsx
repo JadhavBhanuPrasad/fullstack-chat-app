@@ -20,7 +20,7 @@ const Profile = () => {
   const [lastName, setLastName] = useState("");
   const [selectedColor, setSelectedColor] = useState(0);
   const fileInputRef = useRef(null);
-
+  console.log(userInfo)
   useEffect(() => {
     if(userInfo.profileSetup) {
       setFirstName(userInfo.firstName);
@@ -138,7 +138,7 @@ const Profile = () => {
                 />
               ) : (
                 <div
-                  className={`uppercase h-36 w-36 md:w-48 md:h-48 flex items-center justify-center text-5xl md:text-4xl font-bold text-white border-[1px] rounded-full ${getColor(selectedColor)}`}
+                  className={`uppercase h-36 w-36 md:w-48 md:h-48 flex items-center justify-center text-5xl md:text-4xl font-bold  rounded-full border-[1px] bg-[#9b5de52a] text-[#9b5de5]  border-[#9b5de5bb]`}
                 >
                   {firstName
                     ? firstName.split("").shift()
@@ -194,20 +194,10 @@ const Profile = () => {
                 className="rounded-lg p-6 bg-[#2c2e3b] border-none text-white"
               />
             </div>
-            <div className="w-full flex items-center justify-center gap-5">
-              {colors.map((color, index) => (
-                <div
-                  key={index}
-                  onClick={() => setSelectedColor(index)}
-                  className={`h-8 w-8 rounded-full cursor-pointer ${selectedColor === index ? "ring-2 ring-white/30" : ""
-                    } ${color}`}
-                ></div>
-              ))}
-            </div>
           </div>
         </div>
         <div className="flex items-center justify-center">  
-          <Button className="w-full h-16 bg-purple-700 text-white hover:bg-purple-900 transition-all duration-300"
+          <Button className="w-full h-16 bg-purple-700 text-white rounded-lg hover:bg-purple-900 transition-all duration-300"
           onClick={saveChanges}>Save Changes</Button>
         </div>
       </div>

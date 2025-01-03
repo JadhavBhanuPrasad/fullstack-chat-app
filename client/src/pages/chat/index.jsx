@@ -9,7 +9,9 @@ import EmptyChatContainer from "./components/empty-chat-container/index.jsx"
 
 const Chat = () => {
     const navigate = useNavigate()
-    const {userInfo} = useAppStore()
+    const {userInfo,selectedChatType} = useAppStore()
+    
+  console.log(selectedChatType)
     useEffect(() => {
       if (!userInfo.profileSetup) {
         toast('Please complete your profile setup')
@@ -19,8 +21,10 @@ const Chat = () => {
     return (
       <div className="flex h-[100vh] text-white overflow-hidden">
         <ContactsContainer />
-        <ChatContainer/>
-       {/* <EmptyChatContainer /> */}
+        {
+          selectedChatType === undefined ? (<EmptyChatContainer />) : ( <ChatContainer/>)
+        }
+       
       </div>
     )
   }

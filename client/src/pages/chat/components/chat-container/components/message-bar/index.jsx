@@ -3,7 +3,6 @@ import {GrAttachment} from 'react-icons/gr'
 import { RiEmojiStickerLine } from 'react-icons/ri'
 import {IoSend} from 'react-icons/io5'
 import EmojiPicker from 'emoji-picker-react';
-import { use } from 'react';
 
 const MessageBar = () => {
     const [message, setMessage] = useState("")
@@ -39,8 +38,7 @@ const MessageBar = () => {
               <button className='text-neutral-500 px-0 bg-transparent border-none focus:outline-none hover:text-white duration-300 transition-all'>
                   <GrAttachment className='text-3xl' />
               </button>
-              <div className="relative">
-                  <button className='text-neutral-500 px-0 bg-transparent border-none focus:outline-none hover:text-white duration-300 transition-all'
+              <button className='text-neutral-500 px-0 bg-transparent border-none focus:outline-none hover:text-white duration-300 transition-all'
                   onClick={() => setEmojiPickerOpen(true)}>
                       <RiEmojiStickerLine className='text-3xl' />
                   </button>
@@ -51,7 +49,7 @@ const MessageBar = () => {
                     onEmojiClick={handleAddEmoji}
                     />
                   </div>
-              </div>
+              
           </div>
           <button className='bg-[#8417ff] rounded-md flex items-center justify-center p-5 hover:bg-[#741bda] focus:bg-[#741bda] duration-300 transition-all'
               onClick={handleSendMessage}>
